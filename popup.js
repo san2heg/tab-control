@@ -9,7 +9,6 @@ function init() {
 
 // Removes all tabs in current window and replaces with fresh tab
 function purgeTabs() {
-  appendToLog('purging tabs in current window');
   chrome.tabs.query({
     currentWindow: true
   }, function(tabs) {
