@@ -6,14 +6,18 @@
     "tabs"
   ],
   "background": {
-    "persistent": false,
-    "scripts": ["background.js"]
+    "scripts": [
+      "TabWrapper.js",
+      "eventPage.js"
+    ],
+    "persistent": false
   },
 
   "description": "A chrome extension to manage tabs.",
 
   "browser_action": {
     "default_title": "Tab Control",
+    "default_popup": "popup.html"
   },
 
   "author": "Sanketh Hegde"
