@@ -1,5 +1,8 @@
 var TAB_LIMIT = 10;
-var all_tabs = {};
+var tabs_all = {};
+chrome.storage.local.get(function(storage_tabs_all) {
+  tabs_all = storage_tabs_all;
+});
 // all_tabs[<windowId>.toString()][<tabId>.toString()]
 // -> <TabWrapper instance>
 
@@ -9,15 +12,16 @@ function attemptToReplaceOldestTab(tab) {
     currentWindow: true
   }, function(tabs) {
     if (tabs.length > TAB_LIMIT) {
-      let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs[0].windowId);
-      let tab_url = tab.url;
-      console.log("LEAST ACTIVE TAB: " + oldest_tab_id);
-      chrome.tabs.remove(tab.id);
-      chrome.tabs.update(oldest_tab_id, {
-        url: tab_url,
-        active: true
+      chrome.storage.local.get(function(tabs_all) {
+        let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs[0].windowId, tabs_all);
+        let tab_url = tab.url;
+        console.log("LEAST ACTIVE TAB: " + oldest_tab_id);
+        chrome.tabs.remove(tab.id);
+        chrome.tabs.update(oldest_tab_id, {
+          url: tab_url,
+          active: true
+        });
       });
-
       // let oldest_tab = all_tabs[tabs[0].windowId][oldest_tab_id.toString()]
       // chrome.tabs.move(tab.id, {
       //   index: oldest_tab.tab.index
@@ -28,14 +32,14 @@ function attemptToReplaceOldestTab(tab) {
 }
 
 // Get oldest/least active tab from list of tabs
-function getLeastActiveTabIdFromWindow(windowId) {
-  let window_tabs = all_tabs[windowId.toString()];
+function getLeastActiveTabIdFromWindow(windowId, tabs_all) {
+  let window_tabs = tabs_all[windowId.toString()];
 
   var min_id;
   var i = 0;
   for (var tab_id in window_tabs) {
     if (i > 0) {
-      if (all_tabs[windowId][tab_id].time_last_active < all_tabs[windowId][min_id].time_last_active)
+      if (tabs_all[windowId][tab_id].time_last_active < tabs_all[windowId][min_id].time_last_active)
         min_id = tab_id;
     }
     else
@@ -49,17 +53,33 @@ function getLeastActiveTabIdFromWindow(windowId) {
 // Listener - Tab Creation
 chrome.tabs.onCreated.addListener(function(tab) {
   console.log("CREATED: " + tab.id);
+  //let new_tab = new TabWrapper(tab);
+  // if (all_tabs[tab.windowId] == undefined)
+  //   all_tabs[tab.windowId] = {};
+  // all_tabs[tab.windowId][tab.id] = new_tab;
+
+
   let new_tab = new TabWrapper(tab);
-  if (all_tabs[tab.windowId] == undefined)
-    all_tabs[tab.windowId] = {};
-  all_tabs[tab.windowId][tab.id] = new_tab;
-  attemptToReplaceOldestTab(tab);
+  chrome.storage.local.get(function(tabs_all) {
+    if (tabs_all == undefined) {
+      tabs_all = {};
+    }
+    if (tabs_all[tab.windowId] == undefined)
+      tabs_all[tab.windowId] = {};
+    tabs_all[tab.windowId][tab.id] = new_tab;
+    chrome.storage.local.set(tabs_all);
+    console.log(tabs_all);
+    attemptToReplaceOldestTab(tab);
+  });
 });
 
 // Listener - Tab Activation
 chrome.tabs.onActivated.addListener(function(activeInfo) {
   console.log("ACTIVE: " + activeInfo.tabId);
-  all_tabs[activeInfo.windowId.toString()][activeInfo.tabId.toString()].madeActive();
+  chrome.storage.local.get(function(tabs_all) {
+    tabs_all[activeInfo.windowId.toString()][activeInfo.tabId.toString()].madeActive();
+    chrome.storage.local.set(tabs_all);
+  });
 });
 
 // // Listener - Tab Updates
@@ -70,17 +90,22 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 // Listener - Tab Removal
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
   console.log("REMOVED: " + tabId);
-  delete all_tabs[removeInfo.windowId.toString()][tabId.toString()];
+  chrome.storage.local.get(function(tabs_all) {
+    delete tabs_all[removeInfo.windowId.toString()][tabId.toString()];
+    chrome.storage.local.set(tabs_all);
+  });
 });
 
-// Dump all tabs in all_tabs
+// Dump all tabs in tabs_all
 function dumpTabs() {
-  console.log("-start-");
-  for (var window_id in all_tabs) {
-    for (var tab_id in all_tabs[window_id.toString()]) {
-      var tab_obj = all_tabs[window_id.toString()][tab_id.toString()];
-      console.log("(" + window_id + ")[" + tab_obj.tab.index + "] " + tab_id + ":\t created - " + tab_obj.time_created + ", active - " + tab_obj.time_last_active);
+  chrome.storage.local.get(function(tabs_all) {
+    console.log("-start-");
+    for (var window_id in tabs_all) {
+      for (var tab_id in tabs_all[window_id.toString()]) {
+        var tab_obj = tabs_all[window_id.toString()][tab_id.toString()];
+        console.log("(" + window_id + ")[" + tab_obj.tab.index + "] " + tab_id + ":\t created - " + tab_obj.time_created + ", active - " + tab_obj.time_last_active);
+      }
     }
-  }
-  console.log("-end-");
+    console.log("-end-");
+  });
 }
