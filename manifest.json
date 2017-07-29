@@ -3,13 +3,12 @@
   "name": "Tab Control",
   "version": "1.0.0",
   "permissions": [
-    "tabs",
-    "storage"
+    "tabs"
   ],
   "background": {
     "scripts": [
-      "TabWrapper.js",
-      "background.js"
+      "js/TabWrapper.js",
+      "js/background.js"
     ]
   },
 

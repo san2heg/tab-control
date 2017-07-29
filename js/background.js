@@ -7,6 +7,18 @@ chrome.runtime.onStartup.addListener(function() {
   scanForMissedTabs();
 });
 
+// Receive a message from the popup to change the TAB_LIMIT
+// Min: 4, Max: 15
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  console.log("Message Received: " + message.changeValue);
+  var new_limit = TAB_LIMIT + message.changeValue;
+  if (new_limit >= 4 && new_limit <= 15)
+    TAB_LIMIT = new_limit;
+  sendResponse({
+    limit: TAB_LIMIT
+  });
+});
+
 // Scan all tabs and add any tabs to tabs_all that may have been
 // missed on Chrome startup
 function scanForMissedTabs() {
@@ -75,6 +87,10 @@ chrome.tabs.onCreated.addListener(function(tab) {
   tabs_all[tab.windowId][tab.id] = new_tab;
   attemptToReplaceOldestTab(tab);
 });
+
+/*
+* MARK - Listeners
+*/
 
 // Listener - Tab Activation
 chrome.tabs.onActivated.addListener(function(activeInfo) {

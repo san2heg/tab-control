@@ -3,12 +3,17 @@
   <head>
     <meta charset="utf-8">
     <title>Tab Control</title>
-    <script src="popup.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popup.js"></script>
   </head>
   <body style="min-width: 200px;">
     <h1>Tab Control</h1>
     <button id="purgeCurrent">Purge All Tabs in Current Window</button>
     <br><br>
     <button id="purgeAll">Purge All Tabs</button>
+    <br><br>
+    <button id="decrementLimit">-</button>
+      <span id="tab_limit"></span>
+    <button id="incrementLimit">+</button>
   </body>
 </html>
