@@ -1,11 +1,24 @@
+chrome.runtime.onStartup.addListener(function() {
+  console.log("STARTING");
+  chrome.storage.local.set({
+    'started': 0
+  });
+});
+
 chrome.storage.local.get(init);
 
 function init(global_tabs) {
-  var TAB_LIMIT = 10;
   var tabs_all = global_tabs;
-
-  //var all_tabs = {};
-  // all_tabs[<windowId>.toString()][<tabId>.toString()]
+  if (tabs_all['started'] == 0) {
+    tabs_all = {};
+    chrome.storage.local.set(tabs_all);
+    chrome.storage.local.get(function(tt) {
+      console.log(tt);
+    });
+    console.log("CLEARING");
+  }
+  var TAB_LIMIT = 10;
+  // tabs_all[<windowId>.toString()][<tabId>.toString()]
   // -> <TabWrapper instance>
 
   // Replace oldest tab when total number of tabs in window exceeds limit
@@ -57,6 +70,9 @@ function init(global_tabs) {
     // if (all_tabs[tab.windowId] == undefined)
     //   all_tabs[tab.windowId] = {};
     // all_tabs[tab.windowId][tab.id] = new_tab;
+
+    if (tabs_all['started'] == 0)
+      tabs_all['started'] = 1;
 
     let new_tab = new TabWrapper(tab);
     if (tabs_all == undefined) {

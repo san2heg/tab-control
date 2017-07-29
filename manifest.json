@@ -9,7 +9,8 @@
   "background": {
     "scripts": [
       "TabWrapper.js",
-      "eventPage.js"
+      "eventPage.js",
+      "background.js"
     ],
     "persistent": false
   },
