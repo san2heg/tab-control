@@ -3,7 +3,8 @@
   "name": "Tab Control",
   "version": "1.0.0",
   "permissions": [
-    "tabs"
+    "tabs",
+    "storage"
   ],
   "background": {
     "scripts": [

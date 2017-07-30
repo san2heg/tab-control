@@ -1,5 +1,7 @@
-* Add: Make TAB_LIMIT persist after chrome closes (try to use options, not storage)
-- Bug: Tab limit can be lower than current amount of tabs
+[DONE] Add: Make TAB_LIMIT persist after chrome closes (try to use options, not storage)
+[DONE] Bug: Tab limit can be lower than current amount of tabs
 - Add: Option to ignore pinned tabs (defaults to yes)
 - Make UI pretty
-- Deal with 
+- Deal with Tab Update events
+- Add button for purging inactive tabs
+  - Add option for what defines inactive (how much time)

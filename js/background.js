@@ -1,21 +1,49 @@
 var tabs_all = {};
-var TAB_LIMIT = 8;
+var TAB_LIMIT;
 // tabs_all[<windowId>.toString()][<tabId>.toString()]
 // -> <TabWrapper instance>
 
+// Startup operations:
+// 1. Scan for tabs that may have been missed on startups and wrap them
+// 2. Sync all options
 chrome.runtime.onStartup.addListener(function() {
   scanForMissedTabs();
+  chrome.storage.sync.get(function(options) {
+    TAB_LIMIT = options['tab_limit'];
+  });
 });
 
 // Receive a message from the popup to change the TAB_LIMIT
 // Min: 4, Max: 15
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  console.log("Message Received: " + message.changeValue);
-  var new_limit = TAB_LIMIT + message.changeValue;
-  if (new_limit >= 4 && new_limit <= 15)
-    TAB_LIMIT = new_limit;
-  sendResponse({
-    limit: TAB_LIMIT
+// chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+//   console.log("Message Received: " + message.changeValue);
+//   var new_limit = TAB_LIMIT + message.changeValue;
+//   if (new_limit >= 4 && new_limit <= 15) {
+//     TAB_LIMIT = new_limit;
+//     chrome.storage.sync.set({
+//       'tab_limit': new_limit
+//     });
+//     chrome.tabs.query({
+//       currentWindow: true
+//     }, function(tabs) {
+//       if (tabs.length > TAB_LIMIT) {
+//         removeLeastActiveTab();
+//       }
+//     });
+//   }
+//   sendResponse({
+//     limit: TAB_LIMIT
+//   });
+// });
+
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+  TAB_LIMIT = changes['tab_limit'].newValue;
+  chrome.tabs.query({
+    currentWindow: true
+  }, function(tabs) {
+    if (tabs.length > TAB_LIMIT) {
+      removeLeastActiveTab();
+    }
   });
 });
 
@@ -53,6 +81,16 @@ function attemptToReplaceOldestTab(tab) {
         active: true
       });
     }
+  });
+}
+
+// Delete oldest/least active tab, someTab is used to get current window
+function removeLeastActiveTab() {
+  chrome.tabs.query({
+    currentWindow: true
+  }, function(tabs) {
+    let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs[0].windowId, tabs_all);
+    chrome.tabs.remove(oldest_tab_id);
   });
 }
 
