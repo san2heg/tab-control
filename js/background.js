@@ -30,7 +30,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       'tab_limit': new_limit
     });
     chrome.tabs.query({
-      currentWindow: true
+      currentWindow: true,
+      pinned: false // PINNED OPTION
     }, function(tabs) {
       if (tabs.length > TAB_LIMIT) {
         removeLeastActiveTab();
@@ -64,10 +65,11 @@ function scanForMissedTabs() {
 // Replace oldest tab when total number of tabs in window exceeds limit
 function attemptToReplaceOldestTab(tab) {
   chrome.tabs.query({
-    currentWindow: true
+    currentWindow: true,
+    pinned: false // PINNED OPTION
   }, function(tabs) {
     if (tabs.length > TAB_LIMIT) {
-      let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs[0].windowId, tabs_all);
+      let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs);
       let tab_url = tab.url;
       console.log("LEAST ACTIVE TAB: " + oldest_tab_id);
       chrome.tabs.remove(tab.id);
@@ -82,22 +84,26 @@ function attemptToReplaceOldestTab(tab) {
 // Delete oldest/least active tab, someTab is used to get current window
 function removeLeastActiveTab() {
   chrome.tabs.query({
-    currentWindow: true
+    currentWindow: true,
+    pinned: false // PINNED OPTION
   }, function(tabs) {
-    let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs[0].windowId, tabs_all);
+    let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs);
     chrome.tabs.remove(oldest_tab_id);
   });
 }
 
 // Get oldest/least active tab from list of tabs
-function getLeastActiveTabIdFromWindow(windowId, tabs_all) {
-  let window_tabs = tabs_all[windowId.toString()];
+function getLeastActiveTabIdFromWindow(unwrapped_window_tabs) {
+  let windowId = unwrapped_window_tabs[0].windowId.toString();
+  window_tabs = tabs_all[windowId];
   var min_id;
   var i = 0;
   for (var tab_id in window_tabs) {
     if (i > 0) {
-      if (tabs_all[windowId][tab_id].time_last_active < tabs_all[windowId][min_id].time_last_active)
-        min_id = tab_id;
+      if (tabs_all[windowId][tab_id].time_last_active < tabs_all[windowId][min_id].time_last_active) {
+        if (!tabs_all[windowId][tab_id].tab.pinned) // PINNED OPTION
+          min_id = tab_id;
+      }
     }
     else
       min_id = tab_id;
@@ -137,6 +143,7 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
   delete tabs_all[removeInfo.windowId.toString()][tabId.toString()];
 });
 
+// Listener - Window Removal
 chrome.windows.onRemoved.addListener(function(windowId) {
   console.log("WINDOW REMOVED: " + windowId);
   delete tabs_all[windowId.toString()];

@@ -40,7 +40,8 @@ function initTabLimit() {
 // Removes all tabs in current window and replaces with fresh tab
 function purgeTabs() {
   chrome.tabs.query({
-    currentWindow: true
+    currentWindow: true,
+    pinned: false // PINNED OPTION
   }, function(tabs) {
     chrome.tabs.create({});
     for (var i=0; i<tabs.length; i++) {

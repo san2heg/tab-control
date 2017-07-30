@@ -1,10 +1,12 @@
-# 1.1.0
+## 1.1.1
+- Now ignores pinned tabs
+
+## 1.1.0
 - Tab limit option now persists after Chrome closes
 - When user attempts to decrease tab limit lower than current amount of tabs.
   the least active tab will be removed
 
 ## 1.0.0
-
 First deployment of extension. Features:
 - Purge tabs and purge windows buttons
 - When Tab limit is exceeded, least active tab gets replaced
