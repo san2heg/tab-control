@@ -1,5 +1,6 @@
 $(document).ready(init);
 
+// Start point
 function init() {
   initTabLimit();
   $("#purgeCurrent").click(purgeTabs);
