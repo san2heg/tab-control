@@ -1,5 +1,8 @@
 var tabs_all = {};
 var TAB_LIMIT;
+let MAX_TAB_LIMIT = 20;
+let MIN_TAB_LIMIT = 4;
+let DEFAULT_TAB_LIMIT = 10;
 // tabs_all[<windowId>.toString()][<tabId>.toString()]
 // -> <TabWrapper instance>
 
@@ -8,42 +11,34 @@ var TAB_LIMIT;
 // 2. Sync all options
 chrome.runtime.onStartup.addListener(function() {
   scanForMissedTabs();
-  chrome.storage.sync.get(function(options) {
-    TAB_LIMIT = options['tab_limit'];
+  chrome.storage.sync.get(function(lim) {
+    if (lim['tab_limit'] != undefined)
+      TAB_LIMIT = lim['tab_limit'];
+    else
+      TAB_LIMIT = DEFAULT_TAB_LIMIT; // default
   });
 });
 
 // Receive a message from the popup to change the TAB_LIMIT
 // Min: 4, Max: 15
-// chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-//   console.log("Message Received: " + message.changeValue);
-//   var new_limit = TAB_LIMIT + message.changeValue;
-//   if (new_limit >= 4 && new_limit <= 15) {
-//     TAB_LIMIT = new_limit;
-//     chrome.storage.sync.set({
-//       'tab_limit': new_limit
-//     });
-//     chrome.tabs.query({
-//       currentWindow: true
-//     }, function(tabs) {
-//       if (tabs.length > TAB_LIMIT) {
-//         removeLeastActiveTab();
-//       }
-//     });
-//   }
-//   sendResponse({
-//     limit: TAB_LIMIT
-//   });
-// });
-
-chrome.storage.onChanged.addListener(function(changes, areaName) {
-  TAB_LIMIT = changes['tab_limit'].newValue;
-  chrome.tabs.query({
-    currentWindow: true
-  }, function(tabs) {
-    if (tabs.length > TAB_LIMIT) {
-      removeLeastActiveTab();
-    }
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  console.log("Message Received: " + message.changeValue);
+  var new_limit = TAB_LIMIT + message.changeValue;
+  if (new_limit >= MIN_TAB_LIMIT && new_limit <= MAX_TAB_LIMIT) {
+    TAB_LIMIT = new_limit;
+    chrome.storage.sync.set({
+      'tab_limit': new_limit
+    });
+    chrome.tabs.query({
+      currentWindow: true
+    }, function(tabs) {
+      if (tabs.length > TAB_LIMIT) {
+        removeLeastActiveTab();
+      }
+    });
+  }
+  sendResponse({
+    limit: TAB_LIMIT
   });
 });
 
