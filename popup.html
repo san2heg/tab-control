@@ -10,16 +10,26 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/milligram.css">
   </head>
-  <body style="min-width: 300px;">
+  <body style="width: 300px;">
     <div class="container">
       <div class="row">
         <h1 class="title">Tab Control</h1>
       </div>
       <div class="row">
-        <button class="button purge" id="purgeCurrent" style="width: 100%;">Purge Tabs</button>
+        <button class="button purge" id="purgeCurrent" style="width: 100%;">Purge All in Window</button>
       </div>
+      <!--
       <div class="row">
         <button class="button button-outline purge" id="purgeAll" style="width: 100%;">Purge Windows</button>
+      </div>
+      -->
+      <div class="row">
+        <div class="column" style="padding-left: 0px; padding-right: 5px;">
+          <button class="button button-outline purge" style="width: 100%;">Duplicates</button>
+        </div>
+        <div class="column" style="padding-right: 0px; padding-left: 5px;">
+          <button class="button button-outline purge" style="width: 100%;">Inactive</button>
+        </div>
       </div>
       <hr>
       <div class="row">
@@ -37,7 +47,7 @@
       </div>
       <hr style="margin-bottom: 5px; margin-top: 3px;">
       <div class="row">
-        <p class="footer">&copy; Sanketh Hegde - 2017</p>
+        <p class="footer">1.2.0 &copy; Sanketh Hegde - 2017</p>
       </div>
     </div>
   </body>
