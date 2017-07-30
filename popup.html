@@ -3,17 +3,42 @@
   <head>
     <meta charset="utf-8">
     <title>Tab Control</title>
+    <!-- JS -->
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popup.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/milligram.css">
   </head>
-  <body style="min-width: 200px;">
-    <h1>Tab Control</h1>
-    <button id="purgeCurrent">Purge All Tabs in Current Window</button>
-    <br><br>
-    <button id="purgeAll">Purge All Tabs</button>
-    <br><br>
-    <button id="decrementLimit">-</button>
-      <span id="tab_limit"></span>
-    <button id="incrementLimit">+</button>
+  <body style="min-width: 300px;">
+    <div class="container">
+      <div class="row">
+        <h1 class="title">Tab Control</h1>
+      </div>
+      <div class="row">
+        <button class="button purge" id="purgeCurrent" style="width: 100%;">Purge Tabs</button>
+      </div>
+      <div class="row">
+        <button class="button button-outline purge" id="purgeAll" style="width: 100%;">Purge Windows</button>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="column column-33">
+          <h6 style="margin-top: 9px;">Tab Limit</h6>
+        </div>
+        <div class="column column-offset-10">
+          <button id="decrementLimit" class="button button-outline numSelect">-</button>
+        </div>
+        <div class="column" id="tab_limit" style="text-align: center; font-size: 20px; margin-top: 2px;">
+        </div>
+        <div class="column">
+          <button id="incrementLimit" class="button button-outline numSelect">+</button>
+        </div>
+      </div>
+      <hr style="margin-bottom: 5px; margin-top: 3px;">
+      <div class="row">
+        <p class="footer">&copy; Sanketh Hegde - 2017</p>
+      </div>
+    </div>
   </body>
 </html>

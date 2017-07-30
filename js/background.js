@@ -1,5 +1,5 @@
 var tabs_all = {};
-var TAB_LIMIT = 10;
+var TAB_LIMIT = 8;
 // tabs_all[<windowId>.toString()][<tabId>.toString()]
 // -> <TabWrapper instance>
 
@@ -73,24 +73,19 @@ function getLeastActiveTabIdFromWindow(windowId, tabs_all) {
   return Number(min_id);
 }
 
+/*
+* MARK - Listeners
+*/
+
 // Listener - Tab Creation
 chrome.tabs.onCreated.addListener(function(tab) {
   console.log("CREATED: " + tab.id);
-  //let new_tab = new TabWrapper(tab);
-  // if (all_tabs[tab.windowId] == undefined)
-  //   all_tabs[tab.windowId] = {};
-  // all_tabs[tab.windowId][tab.id] = new_tab;
-
   let new_tab = new TabWrapper(tab);
   if (tabs_all[tab.windowId] == undefined)
     tabs_all[tab.windowId] = {};
   tabs_all[tab.windowId][tab.id] = new_tab;
   attemptToReplaceOldestTab(tab);
 });
-
-/*
-* MARK - Listeners
-*/
 
 // Listener - Tab Activation
 chrome.tabs.onActivated.addListener(function(activeInfo) {
@@ -114,7 +109,7 @@ chrome.windows.onRemoved.addListener(function(windowId) {
   delete tabs_all[windowId.toString()];
 });
 
-// Dump all tabs in tabs_all
+// Debugging - Dump all tabs in tabs_all
 function dumpTabs() {
   console.log("-start-");
   for (var window_id in tabs_all) {

@@ -3,7 +3,7 @@ $(document).ready(init);
 function init() {
   initTabLimit();
   $("#purgeCurrent").click(purgeTabs);
-  $("#purgeAll").click(purgeAll);
+  $("#purgeAll").click(purgeAllTabs);
   $("#decrementLimit").click(decrementTabLimit);
   $("#incrementLimit").click(incrementTabLimit);
 }
