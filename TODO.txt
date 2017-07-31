@@ -10,6 +10,7 @@ $ Add: Once a tab is replaced, the old tab is saved and can be accessible throug
 - Fix: Make tab replacement faster, try to avoid tabs.query call
 - Add: whitelist for urls
 - Add: Option to ignore pinned tabs(defaults to yes)
+$ Add: Icon, description, screenshots, etc..
 
 
 [DONE] Bug: Sometimes, pinned tabs are replaced
