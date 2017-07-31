@@ -7,6 +7,8 @@ function init() {
   $("#purgeAll").click(purgeAllTabs);
   $("#decrementLimit").click(decrementTabLimit);
   $("#incrementLimit").click(incrementTabLimit);
+  $("#purgeDuplicates").click(purgeDuplicates);
+  $("#purgeInactive").click(purgeInactive);
 }
 
 // Increment Tab limit through message to background.js
@@ -59,4 +61,33 @@ function purgeAllTabs() {
       chrome.tabs.remove(tabs[i].id);
     }
   });
+}
+
+// Removes duplicate tabs in terms of URL hostname
+function purgeDuplicates() {
+  chrome.tabs.query({
+    currentWindow: true,
+    pinned: false // PINNED OPTION
+  }, function(tabs) {
+    for (var i=0; i<tabs.length; i++) {
+      for (var j=0; j<tabs.length; j++) {
+        if (i != j && getHostname(tabs[i].url) == getHostname(tabs[j].url)) {
+          chrome.tabs.remove(tabs[j].id);
+          tabs.splice(j, j);
+        }
+      }
+    }
+  });
+}
+
+// Helper - Get hostname from URL
+function getHostname(url) {
+  let parser = document.createElement('a');
+  parser.href = url;
+  return parser.hostname;
+}
+
+// Removes inactive tabs according to inactivity option
+function purgeInactive() {
+
 }

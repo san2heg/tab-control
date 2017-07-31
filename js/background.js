@@ -69,10 +69,10 @@ function attemptToReplaceOldestTab(tab) {
     pinned: false // PINNED OPTION
   }, function(tabs) {
     if (tabs.length > TAB_LIMIT) {
+      chrome.tabs.remove(tab.id);
       let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs);
       let tab_url = tab.url;
       console.log("LEAST ACTIVE TAB: " + oldest_tab_id);
-      chrome.tabs.remove(tab.id);
       chrome.tabs.update(oldest_tab_id, {
         url: tab_url,
         active: true
@@ -105,8 +105,12 @@ function getLeastActiveTabIdFromWindow(unwrapped_window_tabs) {
           min_id = tab_id;
       }
     }
-    else
-      min_id = tab_id;
+    else {
+      if (!tabs_all[windowId][tab_id].tab.pinned)
+        min_id = tab_id;
+      else
+        i--;
+    }
     i++;
   }
   return Number(min_id);
