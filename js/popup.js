@@ -46,7 +46,9 @@ function purgeTabs() {
     currentWindow: true,
     pinned: false // PINNED OPTION
   }, function(tabs) {
-    chrome.tabs.create({});
+    chrome.tabs.create({
+      pinned: false
+    });
     for (var i=0; i<tabs.length; i++) {
       chrome.tabs.remove(tabs[i].id);
     }
@@ -63,31 +65,16 @@ function purgeAllTabs() {
   });
 }
 
-// Removes duplicate tabs in terms of URL hostname
+// Send message to remove duplicate tabs in terms of URL hostname
 function purgeDuplicates() {
-  chrome.tabs.query({
-    currentWindow: true,
-    pinned: false // PINNED OPTION
-  }, function(tabs) {
-    for (var i=0; i<tabs.length; i++) {
-      for (var j=0; j<tabs.length; j++) {
-        if (i != j && getHostname(tabs[i].url) == getHostname(tabs[j].url)) {
-          chrome.tabs.remove(tabs[j].id);
-          tabs.splice(j, j);
-        }
-      }
-    }
+  chrome.runtime.sendMessage({
+    purgeDuplicates: true
   });
 }
 
-// Helper - Get hostname from URL
-function getHostname(url) {
-  let parser = document.createElement('a');
-  parser.href = url;
-  return parser.hostname;
-}
-
-// Removes inactive tabs according to inactivity option
+// Send message to remove inactive tabs according to inactivity option
 function purgeInactive() {
-
+  chrome.runtime.sendMessage({
+    purgeInactive: true
+  });
 }

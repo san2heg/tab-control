@@ -9,6 +9,7 @@
 
   "background": {
     "scripts": [
+      "js/constants.js",
       "js/TabWrapper.js",
       "js/background.js"
     ]

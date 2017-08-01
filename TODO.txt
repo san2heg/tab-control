@@ -2,8 +2,7 @@ $ - Updates before public deployment
 * - Priority
 
 - Add: Tab Update events
-$ Add: Button for purging inactive tabs
-  - Add: option for what defines inactive (how much time)
+- Add: option for what defines inactive (how much time)
 $ Add: Once a tab is replaced, the old tab is saved and can be accessible through popup
   - Add: Option for how many tabs Tab Control saves
 - Add: Highlight last visited tab
@@ -11,8 +10,15 @@ $ Add: Once a tab is replaced, the old tab is saved and can be accessible throug
 - Add: whitelist for urls
 - Add: Option to ignore pinned tabs(defaults to yes)
 $ Add: Icon, description, screenshots, etc..
+*$ Bug: Weird things happen when opening forms that get replaced,
+  try to move and remove instead of remove and update
+$ Bug: Duplicate tabs sometimes don't get removed
 
 
+[DONE] Add: For duplicates, keep most active tab
+[DONE] Bug: Pinned tabs get replaced, Fix: When tabs update, update tabs_all too
+[DONE] Bug: Pinned tabs sometimes get replaced
+[DONE] Add: Button for purging inactive tabs
 [DONE] Bug: Sometimes, pinned tabs are replaced
 [DONE] Add purge duplicates button and functionality
 [DONE] Add: Make TAB_LIMIT persist after chrome closes (try to use options, not storage)
