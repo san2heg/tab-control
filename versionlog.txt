@@ -1,6 +1,7 @@
 ## 1.2.0
 - Now ignores pinned tabs
 - Purge duplicates button added
+- Purge inactive button added
 - Purge windows button removed
 
 ## 1.1.0

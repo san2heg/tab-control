@@ -133,14 +133,8 @@ function attemptToReplaceOldestTab(tab) {
     pinned: false // PINNED OPTION
   }, function(tabs) {
     if (tabs.length > TAB_LIMIT) {
-      chrome.tabs.remove(tab.id);
       let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs);
-      let tab_url = tab.url;
-      console.log("LEAST ACTIVE TAB: " + oldest_tab_id);
-      chrome.tabs.update(oldest_tab_id, {
-        url: tab_url,
-        active: true
-      });
+      chrome.tabs.remove(oldest_tab_id);
     }
   });
 }
@@ -196,7 +190,7 @@ chrome.tabs.onCreated.addListener(function(tab) {
 
 // Listener - Tab Activation
 chrome.tabs.onActivated.addListener(function(activeInfo) {
-  console.log("ACTIVE: " + activeInfo.tabId);
+  console.log("ACTIVE: " + activeInfo.tabId + ", index: " + tabs_all[activeInfo.windowId.toString()][activeInfo.tabId.toString()].tab.index);
   tabs_all[activeInfo.windowId.toString()][activeInfo.tabId.toString()].madeActive();
 });
 
