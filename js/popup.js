@@ -40,18 +40,9 @@ function initTabLimit() {
   });
 }
 
-// Removes all tabs in current window and replaces with fresh tab
 function purgeTabs() {
-  chrome.tabs.query({
-    currentWindow: true,
-    pinned: false // PINNED OPTION
-  }, function(tabs) {
-    chrome.tabs.create({
-      pinned: false
-    });
-    for (var i=0; i<tabs.length; i++) {
-      chrome.tabs.remove(tabs[i].id);
-    }
+  chrome.runtime.sendMessage({
+    purgeTabs: true
   });
 }
 

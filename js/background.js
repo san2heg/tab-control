@@ -51,7 +51,26 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   else if (message.purgeDuplicates) {
     purgeDuplicates();
   }
+  else if (message.purgeTabs){
+    purgeTabs();
+  }
 });
+
+// Removes all tabs in current window and replaces with fresh tab
+function purgeTabs() {
+  chrome.tabs.create({
+    pinned: false
+  });
+  chrome.tabs.query({
+    currentWindow: true,
+    pinned: false // PINNED OPTION
+  }, function(tabs) {
+    console.log(tabs);
+    for (var i=0; i<tabs.length-1; i++) {
+      chrome.tabs.remove(tabs[i].id);
+    }
+  });
+}
 
 // Removes inactive tabs according to inactivity option
 function purgeInactive() {
@@ -214,11 +233,23 @@ chrome.windows.onRemoved.addListener(function(windowId) {
 // Debugging - Dump all tabs in tabs_all
 function dumpTabs() {
   console.log("-start-");
+  console.log("#: (window_id) [index]")
+  var count = 1;
   for (var window_id in tabs_all) {
     for (var tab_id in tabs_all[window_id.toString()]) {
       var tab_obj = tabs_all[window_id.toString()][tab_id.toString()];
-      console.log("(" + window_id + ")[" + tab_obj.tab.index + "] " + tab_id + ":\t created - " + tab_obj.time_created + ", active - " + tab_obj.time_last_active);
+      console.log("#" + count + ": " + "(" + window_id + ")[" + tab_obj.tab.index + "] " + tab_id + ":\t created - " + tab_obj.time_created + ", active - " + tab_obj.time_last_active);
+      count+=1;
     }
   }
   console.log("-end-");
+}
+
+// Debugging - Dump Chrome tabs (not TabWrappers)
+function dumpRawTabs() {
+  console.log("-start-");
+  chrome.tabs.query({}, function(tabs) {
+    console.log(tabs);
+    console.log("-end-");
+  });
 }
