@@ -145,33 +145,16 @@ function scanForMissedTabs() {
   });
 }
 
-// Replace oldest tab when total number of tabs in window exceeds limit
-function attemptToReplaceOldestTab(tab) {
-  chrome.tabs.query({
-    currentWindow: true,
-    pinned: false // PINNED OPTION
-  }, function(tabs) {
-    if (tabs.length > TAB_LIMIT) {
-      let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs);
-      chrome.tabs.remove(oldest_tab_id);
-    }
-  });
-}
-
 // Delete oldest/least active tab, someTab is used to get current window
 function removeLeastActiveTab() {
-  chrome.tabs.query({
-    currentWindow: true,
-    pinned: false // PINNED OPTION
-  }, function(tabs) {
-    let oldest_tab_id = getLeastActiveTabIdFromWindow(tabs);
+  chrome.windows.getCurrent(function(win) {
+    let oldest_tab_id = getLeastActiveTabIdFromWindow(win.id);
     chrome.tabs.remove(oldest_tab_id);
   });
 }
 
 // Get oldest/least active tab from list of tabs
-function getLeastActiveTabIdFromWindow(unwrapped_window_tabs) {
-  let windowId = unwrapped_window_tabs[0].windowId.toString();
+function getLeastActiveTabIdFromWindow(windowId) {
   window_tabs = tabs_all[windowId];
   filtered_window_tabs = Object.keys(window_tabs).reduce(function(filtered_window_tabs, key){
     if (!window_tabs[key].tab.pinned) { // PINNED OPTION
@@ -204,7 +187,15 @@ chrome.tabs.onCreated.addListener(function(tab) {
   if (tabs_all[tab.windowId] == undefined)
     tabs_all[tab.windowId] = {};
   tabs_all[tab.windowId][tab.id] = new_tab;
-  attemptToReplaceOldestTab(tab);
+  // Attempt to replace oldest/least active tab
+  chrome.windows.getCurrent(function(win) {
+    var num_unpinned = Object.keys(getUnpinnedTabsFromList(tabs_all[tab.windowId])).length;
+    if (num_unpinned > TAB_LIMIT) {
+      let oldest_tab_id = getLeastActiveTabIdFromWindow(win.id);
+      delete tabs_all[tab.windowId.toString()][oldest_tab_id.toString()];
+      chrome.tabs.remove(oldest_tab_id);
+    }
+  });
 });
 
 // Listener - Tab Activation
@@ -229,6 +220,17 @@ chrome.windows.onRemoved.addListener(function(windowId) {
   console.log("WINDOW REMOVED: " + windowId);
   delete tabs_all[windowId.toString()];
 });
+
+// Helper - Get filtered list of tabs that are unpinned
+function getUnpinnedTabsFromList(window_tabs) {
+  filtered_tabs = Object.keys(window_tabs).reduce(function(filtered_tabs, key) {
+    if (!window_tabs[key].tab.pinned) { // PINNED OPTION
+      filtered_tabs[key] = window_tabs[key];
+    }
+    return filtered_tabs;
+  }, {});
+  return filtered_tabs;
+}
 
 // Debugging - Dump all tabs in tabs_all
 function dumpTabs() {
