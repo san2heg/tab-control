@@ -12,6 +12,7 @@ $ Add: Once a tab is replaced, the old tab is saved and can be accessible throug
 $ Add: Icon, description, screenshots, etc..
 $ Bug: Duplicate tabs sometimes don't get removed
 
+[DONE] Bug: When spamming tabs, tab control can break
 [DONE] Bug: Weird things happen when opening forms that get replaced, try to move and remove instead of remove and update
 [DONE] Add: For duplicates, keep most active tab
 [DONE] Bug: Pinned tabs get replaced, Fix: When tabs update, update tabs_all too

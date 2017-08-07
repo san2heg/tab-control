@@ -3,6 +3,7 @@
 - Purge duplicates button added
 - Purge inactive button added
 - Purge windows button removed
+- No longer replaces tabs, just removes oldest
 
 ## 1.1.0
 - Tab limit option now persists after Chrome closes
