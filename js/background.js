@@ -11,9 +11,21 @@ var INACTIVE_TIME = 15; // in minutes
 // 2. Sync all options
 chrome.runtime.onStartup.addListener(function() {
   scanForMissedTabs();
-  chrome.storage.sync.get(function(lim) {
-    if (lim['tab_limit'] != undefined)
-      TAB_LIMIT = lim['tab_limit'];
+  chrome.storage.sync.get(function(options) {
+    if (options['tab_limit'] != undefined)
+      TAB_LIMIT = options['tab_limit'];
+    else
+      TAB_LIMIT = DEFAULT_TAB_LIMIT; // default
+  });
+});
+
+// Called when extension is reloaded/installed
+chrome.runtime.onInstalled.addListener(function() {
+  console.log("Reloaded/Reinstalled");
+  scanForMissedTabs();
+  chrome.storage.sync.get(function(options) {
+    if (options['tab_limit'] != undefined)
+      TAB_LIMIT = options['tab_limit'];
     else
       TAB_LIMIT = DEFAULT_TAB_LIMIT; // default
   });
@@ -23,6 +35,8 @@ chrome.runtime.onStartup.addListener(function() {
 // 1) Change TAB_LIMIT by message.changeValue
 //    Min: MIN_TAB_LIMIT, Max: MAX_TAB_LIMIT
 // 2) Purge inactive tabs if message.purgeActive is true
+// 3) Purge duplicate tabs if message.purgeDuplicates is true
+// 4) Purge window tabs if message.purgeTabs is true
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if (message.changeValue != undefined) {
     console.log("Message Received: " + message.changeValue);
