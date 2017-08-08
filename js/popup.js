@@ -43,7 +43,7 @@ function initTabLimit() {
 
 // Get and display the list of recently removed tabs
 function initRecentList() {
-  chrome.storage.sync.get(function(obj) {
+  chrome.storage.local.get(function(obj) {
     var recent_list = obj.recent_list
     console.log(recent_list);
     if (recent_list == undefined || recent_list.length <= 0) {
@@ -51,7 +51,6 @@ function initRecentList() {
       $('#recent-list-title').after(html_str);
     }
     else {
-      console.log("Making rows");
       for (var i=0; i<recent_list.length; i++) {
         var tab_wrapper = recent_list[i];
         $('#recent-list-title').after(getListEntryRow(tab_wrapper.tab.url, tab_wrapper.tab.title, tab_wrapper.tab.favIconUrl, tab_wrapper.time_last_active));
@@ -67,11 +66,11 @@ function getListEntryRow(url, title, faviconUrl, time_last_active) {
   html_str += " <div class=\"column column-10 fav-img\">"
   html_str += "   <img class=\"entry-img\" src=\"" + faviconUrl + "\" width=\"16\" height=\"16\">"
   html_str += " </div>"
-  html_str += " <div class=\"column column-75\" style=\"padding-left: 4px; padding-right: 4px;\">"
+  html_str += " <div class=\"column column-80\" style=\"padding-left: 4px; padding-right: 4px;\">"
   html_str += "   <a target=\"_blank\" style=\"display: block; width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;\" href=\"" + url + "\">" + title + "</a>"
   html_str += " </div>"
   html_str += " <div class=\"column\">"
-  html_str += "   <p style=\"font-weight: 400; color: #808080;\">" + getFormattedTimeFromTimestamp(time_last_active) + "</p>"
+  html_str += "   <p style=\"font-weight: 400; color: #808080; font-size: 13px; margin-top: 4px;\">" + getFormattedTimeFromTimestamp(time_last_active) + "</p>"
   html_str += " </div>"
   html_str += "</div>";
   return html_str;
