@@ -69,8 +69,8 @@ function getListEntryRow(url, title, faviconUrl, time_last_active) {
   html_str += " <div class=\"column column-80\" style=\"padding-left: 4px; padding-right: 4px;\">"
   html_str += "   <a target=\"_blank\" style=\"display: block; width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;\" href=\"" + url + "\">" + title + "</a>"
   html_str += " </div>"
-  html_str += " <div class=\"column\">"
-  html_str += "   <p style=\"font-weight: 400; color: #808080; font-size: 13px; margin-top: 4px;\">" + getFormattedTimeFromTimestamp(time_last_active) + "</p>"
+  html_str += " <div class=\"column\" style=\"padding-left: 5px\">"
+  html_str += "   <p style=\"font-weight: 400; color: #A9A9A9; font-size: 13px; margin-top: 4px;\">" + getFormattedTimeFromTimestamp(time_last_active) + "</p>"
   html_str += " </div>"
   html_str += "</div>";
   return html_str;
