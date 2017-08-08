@@ -218,19 +218,22 @@ chrome.tabs.onCreated.addListener(function(tab) {
 
 function removeAndSaveTab(tab_id, window_id) {
   var tab_wrap = tabs_all[window_id.toString()][tab_id.toString()];
+  var tab_url = tab_wrap.tab.url;
   delete tabs_all[window_id.toString()][tab_id.toString()];
   chrome.tabs.remove(tab_id);
   // Add to recently removed list
   if (tabs_saved == undefined) {
     tabs_saved = [];
   }
-  tabs_saved.push(tab_wrap);
-  if (tabs_saved.length > RECENTS_LIMIT) {
-    tabs_saved.pop();
+  if (tab_url != "chrome://newtab/") {
+    tabs_saved.push(tab_wrap);
+    if (tabs_saved.length > RECENTS_LIMIT) {
+      tabs_saved.pop();
+    }
+    chrome.storage.sync.set({
+      'recent_list': tabs_saved
+    });
   }
-  chrome.storage.sync.set({
-    'recent_list': tabs_saved
-  });
 }
 
 // Listener - Tab Activation

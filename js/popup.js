@@ -106,7 +106,7 @@ function timeSince(date) {
   if (interval > 1) {
     return interval + "m";
   }
-  return Math.floor(seconds) + " s";
+  return Math.floor(seconds) + "s";
 }
 
 // Removes all tabs from current window and replaces with fresh tab
