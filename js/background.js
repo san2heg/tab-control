@@ -2,14 +2,19 @@
 // -> <TabWrapper instance>
 var tabs_all = {};
 
+// List of recently removed tabs
+var tabs_saved;
+
 // OPTIONS
 var TAB_LIMIT;
 var INACTIVE_TIME = 15; // in minutes
+var RECENTS_LIMIT = 10;
 
 // Startup operations:
 // 1. Scan for tabs that may have been missed on startups and wrap them
 // 2. Sync all options
 chrome.runtime.onStartup.addListener(function() {
+  chrome.storage.sync.remove('recent_list');
   scanForMissedTabs();
   chrome.storage.sync.get(function(options) {
     if (options['tab_limit'] != undefined)
@@ -112,15 +117,17 @@ function purgeDuplicates() {
         if (i != j && getHostname(tabs[i].url) == getHostname(tabs[j].url)) {
           var first_tab = tabs_all[tabs[i].windowId.toString()][tabs[i].id.toString()];
           var second_tab = tabs_all[tabs[j].windowId.toString()][tabs[j].id.toString()];
-          if (first_tab.time_last_active >= second_tab.time_last_active) {
+          if (first_tab.time_last_active <= second_tab.time_last_active) {
             chrome.tabs.remove(first_tab.tab.id);
             tabs.splice(i, 1);
-            i--;
+            i=0;
+            j=0;
           }
           else {
             chrome.tabs.remove(second_tab.tab.id);
             tabs.splice(j, 1);
-            j--;
+            i=0;
+            j=0;
           }
         }
       }
@@ -202,15 +209,29 @@ chrome.tabs.onCreated.addListener(function(tab) {
     tabs_all[tab.windowId] = {};
   tabs_all[tab.windowId][tab.id] = new_tab;
   // Attempt to replace oldest/least active tab
-  chrome.windows.getCurrent(function(win) {
-    var num_unpinned = Object.keys(getUnpinnedTabsFromList(tabs_all[tab.windowId])).length;
-    if (num_unpinned > TAB_LIMIT) {
-      let oldest_tab_id = getLeastActiveTabIdFromWindow(win.id);
-      delete tabs_all[tab.windowId.toString()][oldest_tab_id.toString()];
-      chrome.tabs.remove(oldest_tab_id);
-    }
-  });
+  var num_unpinned = Object.keys(getUnpinnedTabsFromList(tabs_all[tab.windowId])).length;
+  if (num_unpinned > TAB_LIMIT) {
+    let oldest_tab_id = getLeastActiveTabIdFromWindow(tab.windowId);
+    removeAndSaveTab(oldest_tab_id, tab.windowId);
+  }
 });
+
+function removeAndSaveTab(tab_id, window_id) {
+  var tab_wrap = tabs_all[window_id.toString()][tab_id.toString()];
+  delete tabs_all[window_id.toString()][tab_id.toString()];
+  chrome.tabs.remove(tab_id);
+  // Add to recently removed list
+  if (tabs_saved == undefined) {
+    tabs_saved = [];
+  }
+  tabs_saved.push(tab_wrap);
+  if (tabs_saved.length > RECENTS_LIMIT) {
+    tabs_saved.pop();
+  }
+  chrome.storage.sync.set({
+    'recent_list': tabs_saved
+  });
+}
 
 // Listener - Tab Activation
 chrome.tabs.onActivated.addListener(function(activeInfo) {

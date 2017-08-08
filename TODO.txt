@@ -3,15 +3,15 @@ $ - Updates before public deployment
 
 - Add: Tab Update events
 - Add: option for what defines inactive (how much time)
-$ Add: Once a tab is replaced, the old tab is saved and can be accessible through popup
   - Add: Option for how many tabs Tab Control saves
 - Add: Highlight last visited tab
 - Fix: Make tab replacement faster, try to avoid tabs.query call
 - Add: whitelist for urls
 - Add: Option to ignore pinned tabs(defaults to yes)
 $ Add: Icon, description, screenshots, etc..
-$ Bug: Duplicate tabs sometimes don't get removed
 
+[DONE] Add: Once a tab is replaced, the old tab is saved and can be accessible through popup
+[DONE] Bug: Duplicate tabs sometimes don't get removed
 [DONE] Bug: When spamming tabs, tab control can break
 [DONE] Bug: Weird things happen when opening forms that get replaced, try to move and remove instead of remove and update
 [DONE] Add: For duplicates, keep most active tab

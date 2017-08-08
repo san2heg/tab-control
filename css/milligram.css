@@ -8,6 +8,10 @@
 
 /* CUSTOM */
 
+img.entry-img {
+  margin-top: 5px;
+}
+
 .title {
   margin-left: auto;
   margin-right: auto;
@@ -356,6 +360,10 @@ input[type='radio'] {
   width: 100%;
 }
 
+.row.recent-entry {
+  height: 25px;
+}
+
 .row.row-no-padding {
   padding: 0;
 }
@@ -435,6 +443,11 @@ input[type='radio'] {
 .row .column.column-10 {
   flex: 0 0 10%;
   max-width: 10%;
+}
+
+.column.column-10.fav-img {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .row .column.column-20 {
@@ -636,13 +649,19 @@ h3 {
 }
 
 h4 {
-  font-size: 2.2rem;
+  width: 100%;
+  text-align: center;
+  font-size: 1.8rem;
   letter-spacing: -.08rem;
   line-height: 1.35;
 }
 
 h5 {
-  font-size: 1.8rem;
+  color: #A9A9A9;
+  width: 100%;
+  text-align: center;
+  font-weight: 400;
+  font-size: 1.4rem;
   letter-spacing: -.05rem;
   line-height: 1.5;
 }
