@@ -227,8 +227,11 @@ function removeAndSaveTab(tab_id, window_id) {
   if (tabs_saved == undefined) {
     tabs_saved = [];
   }
+  var tuple = [];
   if (tab_url != "chrome://newtab/") {
-    tabs_saved.push(tab_wrap);
+    tuple.push(tab_wrap);
+    tuple.push(Date.now());
+    tabs_saved.push(tuple);
     if (tabs_saved.length > RECENTS_LIMIT) {
       tabs_saved.shift();
     }

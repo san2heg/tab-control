@@ -9,21 +9,19 @@
     <script src="js/popup.js"></script>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/milligram.css">
+    <link rel="stylesheet" href="css/milligram-pure.min.css">
+
+    <!-- DEV CSS -->
+    <!-- <link rel="stylesheet" href="css/milligram-pure.css"> -->
   </head>
   <body style="width: 300px;">
     <div class="container">
       <div class="row">
-        <h1 class="title" style="font-size: 40px;">Tab Control</h1>
+        <h1 class="title" style="font-size: 35px;">Tab Control</h1>
       </div>
       <div class="row">
         <button class="button purge" id="purgeCurrent" style="width: 100%;">Purge All in Window</button>
       </div>
-      <!--
-      <div class="row">
-        <button class="button button-outline purge" id="purgeAll" style="width: 100%;">Purge Windows</button>
-      </div>
-      -->
       <div class="row">
         <div class="column" style="padding-left: 0px; padding-right: 5px;">
           <button id="purgeDuplicates" class="button button-outline purge" style="width: 100%;">Duplicates</button>
@@ -36,6 +34,9 @@
       <div class="row" id="recent-list-title" style="height: 25px;">
         <h5>RECENTLY REMOVED</h5>
       </div>
+      <div id="recent-list" style="max-height: 100px; overflow-y: scroll; padding-left: 10px;padding-right: 16px; width: 110%; margin-left: -1%;">
+      </div>
+      <div class="fade" style="content: ''; height: 40px; background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%); position: relative; margin-top: -40px; padding-left: 10px;padding-right: 16px; width: 105%; margin-left: -1%; pointer-events: none;"></div>
       <hr style="margin-top: 10px;">
       <div class="row">
         <div class="column column-33">
