@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Tab Control",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "permissions": [
     "tabs",
     "storage"
@@ -23,9 +23,10 @@
   },
 
   "icons": {
-    "16": "img/icon16.png",
-    "48": "img/icon48.png",
-    "128": "img/icon128.png"
+    "16": "img/icon32.png",
+    "48": "img/icon96.png",
+    "96": "img/icon192.png",
+    "128": "img/icon256.png"
   },
 
   "author": "Sanketh Hegde"

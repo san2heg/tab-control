@@ -47,11 +47,14 @@ function initRecentList() {
     var recent_list = obj.recent_list
     console.log(recent_list);
     if (recent_list == undefined || recent_list.length <= 0) {
-      var html_str = "<div class=\"row\" style=\"height: 30px;\"><h4>No Recents</h4></div>";
+      var html_str = "<div id=\"no-recents\" class=\"row\"><h4>No Recents</h4></div>";
       $('#recent-list').after(html_str);
       $('.fade').hide();
     }
     else {
+      if (recent_list.length <= 4) {
+        $('.fade').hide();
+      }
       for (var i=0; i<recent_list.length; i++) {
         var tab_wrapper = recent_list[i];
         $('#recent-list').prepend(getListEntryRow(tab_wrapper[0].tab.url, tab_wrapper[0].tab.title, tab_wrapper[0].tab.favIconUrl, tab_wrapper[1]));
@@ -67,11 +70,11 @@ function getListEntryRow(url, title, faviconUrl, time_last_active) {
   html_str += " <div class=\"column column-10 fav-img\">"
   html_str += "   <img class=\"entry-img\" src=\"" + faviconUrl + "\" width=\"16\" height=\"16\">"
   html_str += " </div>"
-  html_str += " <div class=\"column column-75\" style=\"padding-left: 4px; padding-right: 4px;\">"
-  html_str += "   <a target=\"_blank\" style=\"display: block; width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 15px; margin-top: 1px;\" href=\"" + url + "\">" + title + "</a>"
+  html_str += " <div id=\"recent-link-col\" class=\"column column-75\">"
+  html_str += "   <a target=\"_blank\" id=\"recent-link\" href=\"" + url + "\">" + title + "</a>"
   html_str += " </div>"
-  html_str += " <div class=\"column\" style=\"padding-left: 5px; padding-right: 0px;\">"
-  html_str += "   <p style=\"font-weight: 400; color: #A9A9A9; font-size: 13px; margin-top: 4px;\">" + getFormattedTimeFromTimestamp(time_last_active) + "</p>"
+  html_str += " <div id=\"recent-time-col\" class=\"column\">"
+  html_str += "   <p id=\"recent-time\">" + getFormattedTimeFromTimestamp(time_last_active) + "</p>"
   html_str += " <div class=\"column\">"
   html_str += " </div>"
   html_str += "</div>";

@@ -1,7 +1,11 @@
+## 1.3.4
+- Fixed some UI bugs
+
 ## 1.3.3
 - New icon!
 - Added scroll bar for recent list
 - Minified and purified CSS
+- First public deployment of extension
 
 ## 1.3.2
 - Recently removed tabs now shift correctly
@@ -28,6 +32,6 @@
   the least active tab will be removed
 
 ## 1.0.0
-First deployment of extension. Features:
+First unlisted deployment of extension. Features:
 - Purge tabs and purge windows buttons
 - When Tab limit is exceeded, least active tab gets replaced
