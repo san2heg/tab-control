@@ -1,0 +1,18 @@
+#!/bin/bash
+
+VERSION=$1
+PROJ_NAME=$2
+
+NEW_ZIP_NAME="tab-control_$VERSION"
+
+cd ..
+cp -R "$PROJ_NAME" "$NEW_ZIP_NAME"
+rm "$NEW_ZIP_NAME/.gitignore"
+rm "$NEW_ZIP_NAME/TODO.txt"
+rm "$NEW_ZIP_NAME/clean-css"
+rm "$NEW_ZIP_NAME/pack"
+rm "$NEW_ZIP_NAME/README.md"
+rm "$NEW_ZIP_NAME/versionlog.txt"
+rm "$NEW_ZIP_NAME/css/milligram.css"
+rm "$NEW_ZIP_NAME/css/milligram-pure.css"
+zip -r "$NEW_ZIP_NAME.zip" "$NEW_ZIP_NAME"

@@ -47,13 +47,16 @@ function initRecentList() {
     var recent_list = obj.recent_list
     console.log(recent_list);
     if (recent_list == undefined || recent_list.length <= 0) {
-      var html_str = "<div id=\"no-recents\" class=\"row\"><h4>No Recents</h4></div>";
+      var html_str = "<div id=\"no-recents\" class=\"row\"><h4><br/>No Recents</h4></div>";
       $('#recent-list').after(html_str);
       $('.fade').hide();
     }
     else {
-      if (recent_list.length <= 4) {
+      if (recent_list.length <= 3) {
         $('.fade').hide();
+        for (var i=0; i<(4-recent_list.length); i++) {
+          $('#recent-list').prepend(getListEntryRow("", "", "", undefined));
+        }
       }
       for (var i=0; i<recent_list.length; i++) {
         var tab_wrapper = recent_list[i];
@@ -83,6 +86,9 @@ function getListEntryRow(url, title, faviconUrl, time_last_active) {
 
 // Helper - Return Date from UNIX timestamp
 function getFormattedTimeFromTimestamp(timestamp) {
+  if (timestamp == undefined) {
+    return "";
+  }
   var date = new Date(timestamp);
   return timeSince(date);
 }
