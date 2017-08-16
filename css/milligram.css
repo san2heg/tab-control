@@ -625,7 +625,6 @@ img {
 }
 
 #recent-list {
-  max-height: 80px;
   overflow-y: scroll;
   padding-left: 10px;
   padding-right: 16px;

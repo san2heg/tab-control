@@ -54,9 +54,6 @@ function initRecentList() {
     else {
       if (recent_list.length <= 3) {
         $('.fade').hide();
-        for (var i=0; i<(4-recent_list.length); i++) {
-          $('#recent-list').prepend(getListEntryRow("", "", "", undefined));
-        }
       }
       for (var i=0; i<recent_list.length; i++) {
         var tab_wrapper = recent_list[i];
