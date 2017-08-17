@@ -630,6 +630,7 @@ img {
   padding-right: 16px;
   width: 110%;
   margin-left: -1%;
+  z-index: 0;
 }
 
 #recent-list-title {
@@ -647,6 +648,7 @@ img {
   width: 105%;
   margin-left: -1%;
   pointer-events: none;
+  z-index: 1;
 }
 
 #tab_limit {
@@ -771,7 +773,7 @@ img {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #81001E;
 }
 
 input:focus + .slider {
@@ -799,10 +801,11 @@ input:checked + .slider:before {
 
 .disable-overlay {
   position: absolute;
-  opacity: 0.2;
+  opacity: 0.25;
   background-color: rgb(150, 150, 150);
   height: 198px;
   left: -10px;
   top: 169px;
   width: 115%;
+  z-index: 2;
 }

@@ -30,7 +30,8 @@ function toggleTC() {
   chrome.runtime.sendMessage({
     toggleValue: toggleValue
   }, function(message) {
-    console.log("Response received");
+    console.log("Response received, reloading recent_list");
+    initRecentList();
   });
 }
 
@@ -87,14 +88,14 @@ function initTabLimit() {
 
 // Get and display the list of recently removed tabs
 function initRecentList() {
+  $("#recent-list").empty();
   chrome.storage.local.get(function(obj) {
     var recent_list = obj.recent_list
     console.log(recent_list);
     if (recent_list == undefined || recent_list.length <= 0) {
       var html_str = "<div id=\"no-recents\" class=\"row\"><h4><br/>No Recents</h4></div>";
-      $('#recent-list').after(html_str);
+      $('#recent-list').html(html_str);
       $('.fade').hide();
-      $('#recent-list').hide();
     }
     else {
       if (recent_list.length <= 3) {
@@ -135,7 +136,7 @@ function getFormattedTimeFromTimestamp(timestamp) {
   return timeSince(date);
 }
 
-// Helper - Return string for time since, e.g. 4 minutes ago
+// Helper - Return string for time since, e.g. '4m' ago
 function timeSince(date) {
   var seconds = Math.floor((new Date() - date) / 1000);
   var interval = Math.floor(seconds / 31536000);
@@ -198,7 +199,7 @@ function purgeInactive() {
     <img class="entry-img" src="img/favicon.ico" width="16" height="16">
   </div>
   <div class="column column-75">
-    <a href="http://google.com">http://google.comefio</a>
+    <a href="http://google.com">Google</a>
   </div>
   <div class="column">
     <p>5:17</p>

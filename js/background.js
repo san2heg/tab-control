@@ -78,6 +78,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     chrome.storage.sync.set({
       'tc_active': message.toggleValue
     });
+    if (TC_ACTIVE) {
+      cleanTabs();
+    }
   }
   else if (message.purgeInactive) {
     purgeInactive();
@@ -185,7 +188,21 @@ function scanForMissedTabs() {
 function removeLeastActiveTab() {
   chrome.windows.getCurrent(function(win) {
     let oldest_tab_id = getLeastActiveTabIdFromWindow(win.id);
-    chrome.tabs.remove(oldest_tab_id);
+    removeAndSaveTab(oldest_tab_id, win.id);
+  });
+}
+
+// Keep deleting least active tab until # of tabs is equal to tab limit
+function cleanTabs() {
+  chrome.tabs.query({
+    currentWindow: true
+  }, function(tabs) {
+    var num_tabs = tabs.length;
+    while (num_tabs > TAB_LIMIT) {
+      var oldest_tab_id = getLeastActiveTabIdFromWindow(tabs[0].windowId);
+      removeAndSaveTab(oldest_tab_id, tabs[0].windowId);
+      num_tabs--;
+    }
   });
 }
 
@@ -233,6 +250,10 @@ chrome.tabs.onCreated.addListener(function(tab) {
   }
 });
 
+// Remove tabs from:
+// (1) chrome
+// (2) tabs_all global
+// and save tab to recent_list
 function removeAndSaveTab(tab_id, window_id) {
   chrome.tabs.remove(tab_id);
   var tab_wrap = tabs_all[window_id.toString()][tab_id.toString()];
@@ -247,7 +268,7 @@ function removeAndSaveTab(tab_id, window_id) {
     tuple.push(tab_wrap);
     tuple.push(Date.now());
     tabs_saved.push(tuple);
-    if (tabs_saved.length > RECENTS_LIMIT) {
+    while (tabs_saved.length > RECENTS_LIMIT) {
       tabs_saved.shift();
     }
     chrome.storage.local.set({

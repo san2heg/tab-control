@@ -19,8 +19,9 @@ sh pack 1.3.4 tab-control
 
 ## Version Log
 
-### 1.3.6
+### 1.4.0
 - Height of extension is now set as to avoid glitchy CSS
+- Can now toggle Tab Control on/off
 
 ### 1.3.5
 - Fixed glitchy height bug

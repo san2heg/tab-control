@@ -11,8 +11,8 @@ $ - Updates before public deployment
 $ Add: Icon, description, screenshots, etc..
 - Bug: CSS sometimes glitchy
   - Fix: Clean up CSS
-- Add toggle for Tab Control
 
+[DONE] Add toggle for Tab Control
 [DONE] Bug: Recently removed tabs doesn't erase
 [DONE] Add: Once a tab is replaced, the old tab is saved and can be accessible through popup
 [DONE] Bug: Duplicate tabs sometimes don't get removed
