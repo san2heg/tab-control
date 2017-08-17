@@ -455,6 +455,7 @@ img {
   padding-right: 16px;
   width: 110%;
   margin-left: -1%;
+  z-index: 0;
 }
 
 #recent-list-title {
@@ -472,6 +473,7 @@ img {
   width: 105%;
   margin-left: -1%;
   pointer-events: none;
+  z-index: 1;
 }
 
 #tab_limit {
@@ -638,4 +640,5 @@ input:checked + .slider:before {
   left: -10px;
   top: 169px;
   width: 115%;
+  z-index: 2;
 }

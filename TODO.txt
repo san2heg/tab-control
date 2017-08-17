@@ -8,10 +8,10 @@ $ - Updates before public deployment
 - Fix: Make tab replacement faster, try to avoid tabs.query call
 - Add: whitelist for urls
 - Add: Option to ignore pinned tabs(defaults to yes)
-$ Add: Icon, description, screenshots, etc..
-- Bug: CSS sometimes glitchy
-  - Fix: Clean up CSS
 
+[DONE] Add: Icon, description, screenshots, etc..
+[DONE] Bug: CSS sometimes glitchy
+[DONE] Fix: Clean up CSS
 [DONE] Add toggle for Tab Control
 [DONE] Bug: Recently removed tabs doesn't erase
 [DONE] Add: Once a tab is replaced, the old tab is saved and can be accessible through popup
