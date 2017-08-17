@@ -7,6 +7,7 @@ var tabs_saved;
 
 // OPTIONS
 var TAB_LIMIT;
+var TC_ACTIVE;
 var INACTIVE_TIME = 15; // in minutes
 var RECENTS_LIMIT = 10;
 
@@ -22,6 +23,11 @@ chrome.runtime.onStartup.addListener(function() {
         TAB_LIMIT = options['tab_limit'];
       else
         TAB_LIMIT = DEFAULT_TAB_LIMIT; // default
+
+      if (options['tc_active'] != undefined)
+        TC_ACTIVE = options['tc_active']
+      else
+        TC_ACTIVE = true;
     });
   });
 });
@@ -64,6 +70,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     }
     sendResponse({
       limit: TAB_LIMIT
+    });
+  }
+  else if (message.toggleValue != undefined) {
+    console.log("TC ACTIVE: " + message.toggleValue);
+    TC_ACTIVE = message.toggleValue;
+    chrome.storage.sync.set({
+      'tc_active': message.toggleValue
     });
   }
   else if (message.purgeInactive) {
@@ -211,10 +224,12 @@ chrome.tabs.onCreated.addListener(function(tab) {
     tabs_all[tab.windowId] = {};
   tabs_all[tab.windowId][tab.id] = new_tab;
   // Attempt to replace oldest/least active tab
-  var num_unpinned = Object.keys(getUnpinnedTabsFromList(tabs_all[tab.windowId])).length;
-  if (num_unpinned > TAB_LIMIT) {
-    let oldest_tab_id = getLeastActiveTabIdFromWindow(tab.windowId);
-    removeAndSaveTab(oldest_tab_id, tab.windowId);
+  if (TC_ACTIVE) {
+    var num_unpinned = Object.keys(getUnpinnedTabsFromList(tabs_all[tab.windowId])).length;
+    if (num_unpinned > TAB_LIMIT) {
+      let oldest_tab_id = getLeastActiveTabIdFromWindow(tab.windowId);
+      removeAndSaveTab(oldest_tab_id, tab.windowId);
+    }
   }
 });
 

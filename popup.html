@@ -9,15 +9,19 @@
     <script src="js/popup.js"></script>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/milligram-pure.min.css">
+    <!-- <link rel="stylesheet" href="css/milligram-pure.min.css"> -->
 
     <!-- DEV CSS -->
-    <!-- <link rel="stylesheet" href="css/milligram.css"> -->
+    <link rel="stylesheet" href="css/milligram.css">
   </head>
   <body style="width: 300px; height: 414px;">
     <div class="container">
       <div class="row">
         <h1 class="title">Tab Control</h1>
+        <label class="switch">
+          <input id="toggle" type="checkbox" checked>
+          <span class="slider round"></span>
+        </label>
       </div>
       <div class="row">
         <button class="button purge" id="purgeCurrent">Purge All in Window</button>
@@ -31,6 +35,7 @@
         </div>
       </div>
       <hr>
+      <div style="display: none;" class="disable-overlay"></div>
       <div class="row" id="recent-list-title">
         <h5>RECENTLY REMOVED</h5>
       </div>

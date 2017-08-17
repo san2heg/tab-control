@@ -2,6 +2,7 @@ $(document).ready(init);
 
 // Start point
 function init() {
+  initToggle();
   initTabLimit();
   initRecentList();
   $("#purgeCurrent").click(purgeTabs);
@@ -10,6 +11,37 @@ function init() {
   $("#incrementLimit").click(incrementTabLimit);
   $("#purgeDuplicates").click(purgeDuplicates);
   $("#purgeInactive").click(purgeInactive);
+  $("#toggle").click(toggleTC);
+}
+
+// Toggle Tab Control on and off
+// On: Everything functioning
+// Off: Still records tabs in background but does nothing on tab creation
+function toggleTC() {
+  var toggleValue; // true -> checked
+  if ($(this).is(":checked")) {
+    toggleValue = true;
+    enableTC();
+  }
+  else {
+    toggleValue = false;
+    disableTC();
+  }
+  chrome.runtime.sendMessage({
+    toggleValue: toggleValue
+  }, function(message) {
+    console.log("Response received");
+  });
+}
+
+// Helper - Fade in disable div
+function disableTC() {
+  $(".disable-overlay").fadeIn("slow");
+}
+
+// Helper - Make display:none for disable div
+function enableTC() {
+  $(".disable-overlay").fadeOut("slow");
 }
 
 // Increment Tab limit through message to background.js
@@ -32,12 +64,24 @@ function decrementTabLimit() {
   });
 }
 
+// Initialize state of toggle
+function initToggle() {
+  chrome.storage.sync.get(function(obj) {
+    if (obj.tc_active || obj.tc_active == undefined) {
+      $("#toggle").prop('checked', true);
+      enableTC();
+    }
+    else {
+      $("#toggle").prop('checked', false);
+      disableTC();
+    }
+  });
+}
+
 // Get Tab limit through message to background.js
 function initTabLimit() {
-  chrome.runtime.sendMessage({
-    changeValue: 0
-  }, function(message) {
-    $("#tab_limit").text(message.limit.toString());
+  chrome.storage.sync.get(function(obj) {
+    $("#tab_limit").text(obj.tab_limit.toString());
   });
 }
 
@@ -50,6 +94,7 @@ function initRecentList() {
       var html_str = "<div id=\"no-recents\" class=\"row\"><h4><br/>No Recents</h4></div>";
       $('#recent-list').after(html_str);
       $('.fade').hide();
+      $('#recent-list').hide();
     }
     else {
       if (recent_list.length <= 3) {

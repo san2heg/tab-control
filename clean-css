@@ -1,0 +1,3 @@
+#!/bin/bash
+purifycss css/milligram.css popup.html js/*.js -o css/milligram-pure.css
+minify css/milligram-pure.css
