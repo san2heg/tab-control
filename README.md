@@ -1,4 +1,6 @@
-# Tab Control
+# [Tab Control](https://chrome.google.com/webstore/detail/tab-control/hheohnanbmmjfpnpgcejpnabbnjhbhip)
+
+A chrome extension to keep control of your tabs.
 
 ## Scripts
 
