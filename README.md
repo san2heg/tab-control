@@ -22,6 +22,12 @@ sh pack 1.3.4 tab-control
 
 ## Version Log
 
+### 2.0.0
+- Migrated to Chrome Manifest V3
+- Background page replaced with service worker
+- Tab activity state persists across service worker restarts via chrome.storage.session
+- Fixed tab limit showing blank on first install
+
 ### 1.4.0
 - Height of extension is now set as to avoid glitchy CSS
 - Can now toggle Tab Control on/off
