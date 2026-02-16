@@ -82,7 +82,8 @@ function initToggle() {
 // Get Tab limit through message to background.js
 function initTabLimit() {
   chrome.storage.sync.get(function(obj) {
-    $("#tab_limit").text(obj.tab_limit.toString());
+    var limit = obj.tab_limit != undefined ? obj.tab_limit : DEFAULT_TAB_LIMIT;
+    $("#tab_limit").text(limit.toString());
   });
 }
 
